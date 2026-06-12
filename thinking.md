@@ -153,3 +153,44 @@ id，一般是根据业务信息来生成的，这样qdrant会自动给你覆盖
 不过还有一点很重要的是，每个人的认知都是有阶段性的，我认为的”真理“，也是当下的工程
 上我认为的比较好的做法，而不是绝对的，所以请保持怀疑。
 欢迎您的指正与批评
+
+===============================================================================
+以下是我迭代的一些思路
+## 一次关于 AsyncQdrant 的重构思考
+最开始我发现路由层使用 async def。
+这让我意识到：
+如果调用链中的 IO 操作仍然是同步的，
+那么异步路由只是一个外壳。
+于是开始检查调用链：
+Route
+↓
+ask()
+↓
+search_knowledge_base()
+↓
+QdrantClient
+发现检索层仍然使用同步 QdrantClient。（为什么是这个步骤呢？一步一步推就行）
+最开始我认为只需要将 QdrantClient
+替换为 AsyncQdrantClient 即可。
+但进一步检查发现：
+database.py 在 import 阶段就会执行（直接初始化了）
+collection_exists 和 create_collection。
+这属于典型的 Import Side Effect。
+当切换到 AsyncQdrantClient 后，
+这些操作需要 await，
+而 await 无法出现在模块顶层。怎么办呢？
+放进函数里面，但是问题来了， 
+我是不是每次都要调用这个函数初始化呢？
+那我为什么不把这个函数放进lifespan直接管理？
+最终决定：
+database.py 保留资源定义
+lifespan 负责资源初始化
+query.py 负责业务逻辑
+并将 Collection 初始化迁移至 lifespan。
+随后从最底层的 IO 操作开始向上传播 async：
+search_knowledge_base
+↓
+ask
+↓
+Route
+最终完成检索链路异步化。
