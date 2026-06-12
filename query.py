@@ -15,7 +15,7 @@ from qdrant_client.models import (
 from database import COLLECTION_NAME, client
 load_dotenv()
 
-# 1 初始化 Moonshot 客户端 (请确保环境变量中配置了 MOONSHOT_API_KEY)
+# 1 初始化 Moonshot 客户端
 moonshot_client = OpenAI(
     api_key=os.getenv("MOONSHOT_API_KEY"),
     base_url="https://api.moonshot.cn/v1"
@@ -73,7 +73,7 @@ def encode_query(
 # 你向量化储存格式怎么写，这里就要对应！
 
 
-def search_knowledge_base(
+async def search_knowledge_base(
     query_text: str,#这个是用户要传的东西，记住了
     category: str,
     dense_model: SentenceTransformer,
@@ -112,7 +112,7 @@ def search_knowledge_base(
     )
 
     # 4 执行 RRF 融合检索
-    search_results = client.query_points(
+    search_results = await client.query_points(
         collection_name=COLLECTION_NAME,
         prefetch=[prefetch_dense, prefetch_sparse],
         query=FusionQuery(fusion=Fusion.RRF),
@@ -172,10 +172,10 @@ def generate_answer(question: str, chunks: list[dict], category: str) -> dict:
     }
 
 
-def ask(query_text: str, category: str, dense_model, sparse_model) -> dict:
+async def ask(query_text: str, category: str, dense_model, sparse_model) -> dict:
 
     # 一路召回
-    chunks = search_knowledge_base(query_text, category, dense_model, sparse_model)
+    chunks = await search_knowledge_base(query_text, category, dense_model, sparse_model)
 
     # 如果连第一层检索都空空如也，直接熔断，保底机制
     if not chunks:

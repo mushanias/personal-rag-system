@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from sentence_transformers import SentenceTransformer
 from fastembed import SparseTextEmbedding
 from userRoute import router as user
-
+from database import client, COLLECTION_NAME, COLLECTION_CONFIG
 
 
 @asynccontextmanager
@@ -15,8 +15,15 @@ async def lifespan(_app: FastAPI):
     print("正在加载模型.")
     app.state.dense_model = SentenceTransformer("BAAI/bge-small-zh-v1.5")
     app.state.sparse_model = SparseTextEmbedding(model_name="Qdrant/bm25")
+    # ✅ 初始化 Collection
+    if not await client.collection_exists(COLLECTION_NAME):
+        await client.create_collection(
+            collection_name=COLLECTION_NAME,
+            **COLLECTION_CONFIG
+        )
     print("模型加载完成 ")
     yield
+    await client.close()
     print("服务关闭 ")
 
 app = FastAPI(lifespan=lifespan)

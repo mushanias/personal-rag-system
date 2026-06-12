@@ -13,7 +13,7 @@ async def _ask_handler(req: UserRequest, request: Request, category: str) -> Use
     sparse_model = request.app.state.sparse_model
 
     # 调用服务层的一体化接口 (检索 + 生成)
-    result = ask(
+    result = await ask(
         query_text=req.query,
         category=category,
         dense_model=dense_model,
