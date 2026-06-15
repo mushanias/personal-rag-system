@@ -124,13 +124,26 @@ async def search_knowledge_base(
     for hit in search_results.points:
         # 使用 RRF 融合时，hit.score 通常是一个融合分数（如 0.0~1.0 之间）
         if hit.score >= score_threshold:
+            # valid_chunks.append({
+            #     "content": hit.payload["content"],
+            #     "source": hit.payload["source"],
+            #     "score": hit.score,
+            #     "chunk_id": hit.payload.get("chunk_id"),
+            # })
+            payload = hit.payload or {}
+
+            content = payload.get("content")
+            source = payload.get("source")
+
+            if not content or not source:
+                continue
+
             valid_chunks.append({
-                "content": hit.payload["content"],
-                "source": hit.payload["source"],
+                "content": content,
+                "source": source,
                 "score": hit.score,
-                "chunk_id": hit.payload.get("chunk_id"),
+                "chunk_id": payload.get("chunk_id"),
             })
-    # 这里的写法不一定安全，这个字段我认为应该要动态捕捉
     return valid_chunks
 
 
