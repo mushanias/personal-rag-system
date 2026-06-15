@@ -1,7 +1,7 @@
 import os
+from settings import settings
+os.environ["HF_ENDPOINT"] = settings.HF_ENDPOINT
 
-os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
-# 记得写在加载模型前面！
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sentence_transformers import SentenceTransformer
@@ -13,8 +13,8 @@ from database import client, COLLECTION_NAME, COLLECTION_CONFIG
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     print("正在加载模型.")
-    app.state.dense_model = SentenceTransformer("BAAI/bge-small-zh-v1.5")
-    app.state.sparse_model = SparseTextEmbedding(model_name="Qdrant/bm25")
+    app.state.dense_model = SentenceTransformer(settings.DENSE_MODEL_NAME)
+    app.state.sparse_model = SparseTextEmbedding(model_name=settings.SPARSE_MODEL_NAME)
     # ✅ 初始化 Collection
     if not await client.collection_exists(COLLECTION_NAME):
         await client.create_collection(

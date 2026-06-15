@@ -1,6 +1,7 @@
 #我们在这个文件中实现文本的切块，向量化储存
 import os
-os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+from settings import settings
+os.environ["HF_ENDPOINT"] = settings.HF_ENDPOINT
 
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
@@ -91,8 +92,8 @@ async def ensure_collection_exists():
 async def main():
     docs = load_docs()
 
-    dense_model = SentenceTransformer("BAAI/bge-small-zh-v1.5")
-    sparse_model = SparseTextEmbedding(model_name="Qdrant/bm25")
+    dense_model = SentenceTransformer(settings.DENSE_MODEL_NAME)
+    sparse_model = SparseTextEmbedding(model_name=settings.SPARSE_MODEL_NAME)
 
     points = build_points(
         docs=docs,

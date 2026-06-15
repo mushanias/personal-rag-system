@@ -1,7 +1,5 @@
-import os
 from openai import AsyncOpenAI
 from fastembed import SparseTextEmbedding
-from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 from qdrant_client.models import (
     FieldCondition,
@@ -13,12 +11,12 @@ from qdrant_client.models import (
     FusionQuery
 )
 from database import COLLECTION_NAME, client
-load_dotenv()
+from settings import settings
 
 # 1 初始化 Moonshot 客户端
 moonshot_client = AsyncOpenAI(
-    api_key=os.getenv("MOONSHOT_API_KEY"),
-    base_url="https://api.moonshot.cn/v1"
+    api_key=settings.MOONSHOT_API_KEY,
+    base_url=settings.MOONSHOT_BASE_URL,
 )
 
 # 2 统一的 Prompt 模版配置
@@ -78,8 +76,10 @@ async def search_knowledge_base(
     category: str,
     dense_model: SentenceTransformer,
     sparse_model: SparseTextEmbedding,
-    score_threshold: float = 0.05,  # 防幻觉层1：分数截断
+    score_threshold: float | None = None,
 ) -> list[dict]:
+    if score_threshold is None:
+        score_threshold = settings.SCORE_THRESHOLD
 
     # 1 先把问题向量化
     dense_vector, sparse_vector = encode_query(
@@ -158,7 +158,7 @@ async def generate_answer(question: str, chunks: list[dict], category: str) -> d
     # 4. 请求 Moonshot
     try:
         response = await moonshot_client.chat.completions.create(
-            model="moonshot-v1-8k",
+            model=settings.MOONSHOT_MODEL,
             messages=messages,
             temperature=0.3,
         )

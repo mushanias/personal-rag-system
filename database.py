@@ -5,14 +5,14 @@ from qdrant_client.models import (
     SparseVectorParams,
     SparseIndexParams,
 )
-
+from settings import settings
 
 client = AsyncQdrantClient(
-    host="localhost",
-    port=6333
+    host=settings.QDRANT_HOST,
+    port=settings.QDRANT_PORT,
 )
-# 定义表的结构
-COLLECTION_NAME = "knowledge_base"
+
+COLLECTION_NAME = settings.COLLECTION_NAME
 
 COLLECTION_CONFIG = {
     "vectors_config": {
