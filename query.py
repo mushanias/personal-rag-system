@@ -1,5 +1,5 @@
 import os
-from openai import OpenAI
+from openai import AsyncOpenAI
 from fastembed import SparseTextEmbedding
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
@@ -16,7 +16,7 @@ from database import COLLECTION_NAME, client
 load_dotenv()
 
 # 1 初始化 Moonshot 客户端
-moonshot_client = OpenAI(
+moonshot_client = AsyncOpenAI(
     api_key=os.getenv("MOONSHOT_API_KEY"),
     base_url="https://api.moonshot.cn/v1"
 )
@@ -133,7 +133,7 @@ async def search_knowledge_base(
     return valid_chunks
 
 
-def generate_answer(question: str, chunks: list[dict], category: str) -> dict:
+async def generate_answer(question: str, chunks: list[dict], category: str) -> dict:
 
 
     # 1 动态动态组装专属的 System Prompt
@@ -157,10 +157,10 @@ def generate_answer(question: str, chunks: list[dict], category: str) -> dict:
 
     # 4. 请求 Moonshot
     try:
-        response = moonshot_client.chat.completions.create(
+        response = await moonshot_client.chat.completions.create(
             model="moonshot-v1-8k",
             messages=messages,
-            temperature=0.3,  # 低温度，确保严格呆在知识库里，不放飞自我
+            temperature=0.3,
         )
         answer_text = response.choices[0].message.content
     except Exception as e:
@@ -185,4 +185,4 @@ async def ask(query_text: str, category: str, dense_model, sparse_model) -> dict
         }
 
     # 喂给大模型（顺便把分类带过去，用于选择 Prompt）
-    return generate_answer(query_text, chunks, category)
+    return await generate_answer(query_text, chunks, category)

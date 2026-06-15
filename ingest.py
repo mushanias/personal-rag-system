@@ -8,6 +8,7 @@ from fastembed import SparseTextEmbedding
 from qdrant_client.models import PointStruct, SparseVector
 from database import client, COLLECTION_NAME
 import uuid
+import asyncio
 # 首先我们拿文档，把所有 txt 内容一次性载入内存
 # 这里应该不应该直接进去下次想下怎么办
 docs = {
@@ -78,9 +79,16 @@ for category, raw_text in docs.items():
         )
         points.append(point)
 
-client.upsert(
-    collection_name=COLLECTION_NAME,
-    points=points,
-)
+async def main():
+    await client.upsert(
+        collection_name=COLLECTION_NAME,
+        points=points,
+    )
 
-print(f"入库完成 ✅ 共 {len(points)} 条 chunks")
+    await client.close()
+
+    print(f"入库完成 ✅ 共 {len(points)} 条 chunks")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
