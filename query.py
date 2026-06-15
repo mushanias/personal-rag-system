@@ -128,6 +128,7 @@ async def search_knowledge_base(
                 "content": hit.payload["content"],
                 "source": hit.payload["source"],
                 "score": hit.score,
+                "chunk_id": hit.payload.get("chunk_id"),
             })
     # 这里的写法不一定安全，这个字段我认为应该要动态捕捉
     return valid_chunks

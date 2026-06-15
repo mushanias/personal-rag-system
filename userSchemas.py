@@ -18,7 +18,14 @@ class UserRequest(BaseModel):
         return value
 
 
+class SourceChunk(BaseModel):
+    content: str
+    source: str
+    score: float
+    chunk_id: str | None = None
+
+
 class UserResponse(BaseModel):
     answer: str
-    sources: list[dict]
+    sources: list[SourceChunk]
 

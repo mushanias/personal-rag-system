@@ -1,4 +1,3 @@
-# userRoute.py
 from fastapi import APIRouter, Request
 from userSchemas import UserRequest, UserResponse
 from query import ask
@@ -6,8 +5,7 @@ from query import ask
 # 创建一个专属于 QA 的路由组，带上 /ask 前缀
 router = APIRouter(prefix="/ask", tags=["知识库问答"])
 
-
-async def _ask_handler(req: UserRequest, request: Request, category: str) -> UserResponse:
+async def _ask_handler(req: UserRequest, request: Request, category: str) -> dict:
 
     dense_model = request.app.state.dense_model
     sparse_model = request.app.state.sparse_model
@@ -20,8 +18,7 @@ async def _ask_handler(req: UserRequest, request: Request, category: str) -> Use
         sparse_model=sparse_model,
     )
 
-    # 将服务层返回的 dict (包含 answer 和 sources) 解包并转化为 Pydantic 响应模型
-    return UserResponse(**result)
+    return result
 
 @router.post("/study", response_model=UserResponse, summary="学术与技术研讨问答")
 async def ask_study(req: UserRequest, request: Request):
