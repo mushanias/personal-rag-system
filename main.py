@@ -1,6 +1,6 @@
-import os
+
 from settings import settings
-os.environ["HF_ENDPOINT"] = settings.HF_ENDPOINT
+
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI

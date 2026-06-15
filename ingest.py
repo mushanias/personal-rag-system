@@ -1,8 +1,5 @@
 #我们在这个文件中实现文本的切块，向量化储存
-import os
 from settings import settings
-os.environ["HF_ENDPOINT"] = settings.HF_ENDPOINT
-
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
 from fastembed import SparseTextEmbedding

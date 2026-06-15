@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+if not os.getenv("HF_ENDPOINT"):
+    os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+    
 class Settings:
     # HuggingFace 镜像
     HF_ENDPOINT: str = os.getenv("HF_ENDPOINT", "https://hf-mirror.com")
