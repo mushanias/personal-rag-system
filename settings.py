@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-if not os.getenv("HF_ENDPOINT"):
-    os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+# 12-Factor App（十二要素应用）了解一下即可
 
 class Settings:
     # HuggingFace 镜像

@@ -10,8 +10,9 @@ from qdrant_client.models import (
     Fusion,
     FusionQuery
 )
-from database import COLLECTION_NAME, client
+from database import  client
 from settings import settings
+from exceptions import RetrievalError, LLMServiceError
 
 # 1 初始化 Moonshot 客户端
 moonshot_client = AsyncOpenAI(
@@ -112,12 +113,15 @@ async def search_knowledge_base(
     )
 
     # 4 执行 RRF 融合检索
-    search_results = await client.query_points(
-        collection_name=COLLECTION_NAME,
-        prefetch=[prefetch_dense, prefetch_sparse],
-        query=FusionQuery(fusion=Fusion.RRF),
-        limit=3,
-    )
+    try:
+        search_results = await client.query_points(
+            collection_name=settings.COLLECTION_NAME,
+            prefetch=[prefetch_dense, prefetch_sparse],
+            query=FusionQuery(fusion=Fusion.RRF),
+            limit=3,
+        )
+    except Exception as e:
+        raise RetrievalError(f"知识库检索失败: {str(e)}")
 
     # 5 解析结果
     valid_chunks = []
@@ -144,6 +148,7 @@ async def search_knowledge_base(
                 "score": hit.score,
                 "chunk_id": payload.get("chunk_id"),
             })
+    #所有的数据都是心怀不轨的
     return valid_chunks
 
 
@@ -178,7 +183,7 @@ async def generate_answer(question: str, chunks: list[dict], category: str) -> d
         )
         answer_text = response.choices[0].message.content
     except Exception as e:
-        answer_text = f"❌ 呼叫大模型服务失败，错误原因: {str(e)}"
+        raise LLMServiceError(f"大模型服务调用失败: {str(e)}")
 
     return {
         "answer": answer_text,

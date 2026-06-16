@@ -1,17 +1,18 @@
 import asyncio
-from database import client, COLLECTION_NAME
+from database import client
+from settings import settings
 
 
 async def main():
-    if not await client.collection_exists(COLLECTION_NAME):
-        print(f"Collection 不存在：{COLLECTION_NAME}")
+    if not await client.collection_exists(settings.COLLECTION_NAME):
+        print(f"Collection 不存在：{settings.COLLECTION_NAME}")
         await client.close()
         return
 
-    await client.delete_collection(collection_name=COLLECTION_NAME)
+    await client.delete_collection(collection_name=settings.COLLECTION_NAME)
     await client.close()
 
-    print(f"已删除 Collection：{COLLECTION_NAME}")
+    print(f"已删除 Collection：{settings.COLLECTION_NAME}")
 
 
 if __name__ == "__main__":

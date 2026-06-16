@@ -12,7 +12,6 @@ client = AsyncQdrantClient(
     port=settings.QDRANT_PORT,
 )
 
-COLLECTION_NAME = settings.COLLECTION_NAME
 
 COLLECTION_CONFIG = {
     "vectors_config": {
@@ -25,3 +24,4 @@ COLLECTION_CONFIG = {
         )
     },
 }
+# 隔离外部依赖 + 控制变化 + 统一访问方式，

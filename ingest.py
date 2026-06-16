@@ -4,7 +4,7 @@ from pathlib import Path
 from sentence_transformers import SentenceTransformer
 from fastembed import SparseTextEmbedding
 from qdrant_client.models import PointStruct, SparseVector
-from database import client, COLLECTION_NAME, COLLECTION_CONFIG
+from database import client, COLLECTION_CONFIG
 import uuid
 import asyncio
 # 首先我们拿文档，把所有 txt 内容一次性载入内存
@@ -81,9 +81,9 @@ def build_points(docs, dense_model, sparse_model):
     return points
 
 async def ensure_collection_exists():
-    if not await client.collection_exists(COLLECTION_NAME):
+    if not await client.collection_exists(settings.COLLECTION_NAME):
         await client.create_collection(
-            collection_name=COLLECTION_NAME,
+            collection_name=settings.COLLECTION_NAME,
             **COLLECTION_CONFIG
         )
 async def main():
@@ -100,7 +100,7 @@ async def main():
     await ensure_collection_exists()
 
     await client.upsert(
-        collection_name=COLLECTION_NAME,
+        collection_name=settings.COLLECTION_NAME,
         points=points,
     )
 
@@ -109,3 +109,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+# 为什么会做这个决策呢？因为我需要在启动之前，就把文本处理好，
+# 用户是无法接触到这部分逻辑的
