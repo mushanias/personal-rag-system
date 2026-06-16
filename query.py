@@ -10,15 +10,14 @@ from qdrant_client.models import (
     Fusion,
     FusionQuery
 )
-from database import  client
 from settings import settings
 from exceptions import RetrievalError, LLMServiceError
 from logger import logger
-# 1 初始化 Moonshot 客户端
-moonshot_client = AsyncOpenAI(
-    api_key=settings.MOONSHOT_API_KEY,
-    base_url=settings.MOONSHOT_BASE_URL,
-)
+# # 1 初始化 Moonshot 客户端
+# moonshot_client = AsyncOpenAI(
+#     api_key=settings.MOONSHOT_API_KEY,
+#     base_url=settings.MOONSHOT_BASE_URL,
+# )
 
 # 2 统一的 Prompt 模版配置
 BASE_SYSTEM_PROMPT = (
@@ -77,6 +76,7 @@ async def search_knowledge_base(
     category: str,
     dense_model: SentenceTransformer,
     sparse_model: SparseTextEmbedding,
+    qdrant_client,
     score_threshold: float | None = None,
 ) -> list[dict]:
     if score_threshold is None:
@@ -114,7 +114,7 @@ async def search_knowledge_base(
 
     # 4 执行 RRF 融合检索
     try:
-        search_results = await client.query_points(
+            search_results = await qdrant_client.query_points(
             collection_name=settings.COLLECTION_NAME,
             prefetch=[prefetch_dense, prefetch_sparse],
             query=FusionQuery(fusion=Fusion.RRF),
@@ -161,7 +161,7 @@ async def search_knowledge_base(
     return valid_chunks
 
 
-async def generate_answer(question: str, chunks: list[dict], category: str) -> dict:
+async def generate_answer(question: str, chunks: list[dict], category: str,llm_client) -> dict:
 
 
     # 1 动态动态组装专属的 System Prompt
@@ -190,7 +190,7 @@ async def generate_answer(question: str, chunks: list[dict], category: str) -> d
             category,
             len(chunks),
         )
-        response = await moonshot_client.chat.completions.create(
+        response = await llm_client.chat.completions.create(
             model=settings.MOONSHOT_MODEL,
             messages=messages,
             temperature=0.3,
@@ -211,10 +211,10 @@ async def generate_answer(question: str, chunks: list[dict], category: str) -> d
     }
 
 
-async def ask(query_text: str, category: str, dense_model, sparse_model) -> dict:
+async def ask(query_text: str, category: str, dense_model, sparse_model,llm_client,qdrant_client,) -> dict:
 
     # 一路召回
-    chunks = await search_knowledge_base(query_text, category, dense_model, sparse_model)
+    chunks = await search_knowledge_base(query_text, category, dense_model, sparse_model,qdrant_client,)
 
     # 如果连第一层检索都空空如也，直接熔断，保底机制
     if not chunks:
@@ -224,4 +224,4 @@ async def ask(query_text: str, category: str, dense_model, sparse_model) -> dict
         }
 
     # 喂给大模型（顺便把分类带过去，用于选择 Prompt）
-    return await generate_answer(query_text, chunks, category)
+    return await generate_answer(query_text, chunks, category,llm_client)
