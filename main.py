@@ -8,6 +8,7 @@ from database import client, COLLECTION_CONFIG
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from exceptions import AppException
+from logger import logger
 # 什么时候准备，什么时候运行，什么时候打扫
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
@@ -31,6 +32,12 @@ app = FastAPI(lifespan=lifespan)
 
 @app.exception_handler(AppException)
 async def app_exception_handler(request: Request, exc: AppException):
+    logger.error(
+        "请求处理失败 path=%s error_code=%s message=%s",
+        request.url.path,
+        exc.error_code,
+        exc.message,
+    )
     return JSONResponse(
         status_code=exc.status_code,
         content={

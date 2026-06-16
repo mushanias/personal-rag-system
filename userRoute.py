@@ -1,12 +1,18 @@
 from fastapi import APIRouter, Request
 from userSchemas import UserRequest, UserResponse
 from query import ask
+from logger import logger
 
 # 创建一个专属于 QA 的路由组，带上 /ask 前缀
 router = APIRouter(prefix="/ask", tags=["知识库问答"])
 
 async def _ask_handler(req: UserRequest, request: Request, category: str) -> dict:
-
+    logger.info(
+        "收到用户请求 category=%s query=%s",
+        category,
+        req.query,
+    )
+    
     dense_model = request.app.state.dense_model
     sparse_model = request.app.state.sparse_model
 

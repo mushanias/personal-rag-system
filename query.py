@@ -13,7 +13,7 @@ from qdrant_client.models import (
 from database import  client
 from settings import settings
 from exceptions import RetrievalError, LLMServiceError
-
+from logger import logger
 # 1 初始化 Moonshot 客户端
 moonshot_client = AsyncOpenAI(
     api_key=settings.MOONSHOT_API_KEY,
@@ -149,6 +149,15 @@ async def search_knowledge_base(
                 "chunk_id": payload.get("chunk_id"),
             })
     #所有的数据都是心怀不轨的
+    logger.info(
+        "检索完成 category=%s chunk_count=%s top_score=%s chunk_ids=%s sources=%s",
+        category,
+        len(valid_chunks),
+        valid_chunks[0]["score"] if valid_chunks else None,
+        [c["chunk_id"] for c in valid_chunks],
+        [c["source"] for c in valid_chunks],
+    )
+
     return valid_chunks
 
 
@@ -176,12 +185,23 @@ async def generate_answer(question: str, chunks: list[dict], category: str) -> d
 
     # 4. 请求 Moonshot
     try:
+        logger.info(
+            "开始调用LLM category=%s chunk_count=%s",
+            category,
+            len(chunks),
+        )
         response = await moonshot_client.chat.completions.create(
             model=settings.MOONSHOT_MODEL,
             messages=messages,
             temperature=0.3,
         )
         answer_text = response.choices[0].message.content
+
+        logger.info(
+            "LLM调用成功 category=%s answer_length=%s",
+            category,
+            len(answer_text) if answer_text else 0,
+        )
     except Exception as e:
         raise LLMServiceError(f"大模型服务调用失败: {str(e)}")
 
