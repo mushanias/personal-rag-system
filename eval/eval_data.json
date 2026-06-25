@@ -1,0 +1,188 @@
+[
+  {
+    "id": "study_001",
+    "query": "一个基础的 RAG 查询流程通常包括哪几步？",
+    "category": "study",
+    "expected_chunk_id": "study_1",
+    "expected_source": "study.txt",
+    "expected_answer_points": [
+      "接收用户问题",
+      "把问题向量化",
+      "在向量数据库中检索相关片段",
+      "把检索结果拼接进 Prompt，再交给大模型生成答案"
+    ]
+  },
+  {
+    "id": "study_002",
+    "query": "混合检索为什么要同时使用稠密向量和稀疏向量？",
+    "category": "study",
+    "expected_chunk_id": "study_2",
+    "expected_source": "study.txt",
+    "expected_answer_points": [
+      "稠密向量擅长理解语义相似的问题",
+      "稀疏向量擅长匹配明确关键词",
+      "两者结合可以兼顾语义理解和关键词命中"
+    ]
+  },
+  {
+    "id": "study_003",
+    "query": "chunk 太短或者太长分别会带来什么问题？",
+    "category": "study",
+    "expected_chunk_id": "study_5",
+    "expected_source": "study.txt",
+    "expected_answer_points": [
+      "chunk 太短会导致重要上下文被切碎",
+      "chunk 太长会混入过多无关内容",
+      "这些问题会影响排序和生成"
+    ]
+  },
+  {
+    "id": "study_004",
+    "query": "为什么 uuid5 适合用来生成稳定的向量点 ID？",
+    "category": "study",
+    "expected_chunk_id": "study_8",
+    "expected_source": "study.txt",
+    "expected_answer_points": [
+      "uuid5 可以根据 source 和 chunk_index 生成稳定 ID",
+      "重复执行 ingest 时同一文本片段会得到相同 ID",
+      "可以覆盖旧数据，减少重复写入和脏数据问题"
+    ]
+  },
+  {
+    "id": "study_005",
+    "query": "Reranker 的作用是什么？什么时候加入 reranker 可能有效？",
+    "category": "study",
+    "expected_chunk_id": "study_12",
+    "expected_source": "study.txt",
+    "expected_answer_points": [
+      "Reranker 用来对初步召回的候选片段重新排序",
+      "它通常不是用来扩大召回范围",
+      "如果正确片段能进 top10 但经常进不了 top3，加入 reranker 可能有效"
+    ]
+  },
+
+  {
+    "id": "life_001",
+    "query": "长期熬夜会对人的白天状态产生什么影响？",
+    "category": "life",
+    "expected_chunk_id": "life_0",
+    "expected_source": "life.txt",
+    "expected_answer_points": [
+      "白天注意力下降",
+      "反应变慢",
+      "情绪波动"
+    ]
+  },
+  {
+    "id": "life_002",
+    "query": "睡前可以通过哪些简单习惯来提高睡眠质量？",
+    "category": "life",
+    "expected_chunk_id": "life_1",
+    "expected_source": "life.txt",
+    "expected_answer_points": [
+      "睡前半小时减少手机和电脑使用",
+      "固定睡前流程",
+      "洗漱、整理物品、简单拉伸、关灯休息"
+    ]
+  },
+  {
+    "id": "life_003",
+    "query": "长时间学习或工作导致久坐时，应该怎么缓解僵硬？",
+    "category": "life",
+    "expected_chunk_id": "life_3",
+    "expected_source": "life.txt",
+    "expected_answer_points": [
+      "每隔一段时间站起来活动几分钟",
+      "可以走动、伸展肩膀、转动脖子、放松手腕",
+      "重点是打断长时间静止状态"
+    ]
+  },
+  {
+    "id": "life_004",
+    "query": "情绪压力大时，应该如何区分能控制和不能控制的事情？",
+    "category": "life",
+    "expected_chunk_id": "life_5",
+    "expected_source": "life.txt",
+    "expected_answer_points": [
+      "先把问题写下来",
+      "区分哪些是现在能做的",
+      "区分哪些是暂时无法控制的",
+      "能做的拆成很小一步，不能控制的先接受它存在"
+    ]
+  },
+  {
+    "id": "life_005",
+    "query": "为什么培养习惯时不应该一开始目标设得太大？",
+    "category": "life",
+    "expected_chunk_id": "life_6",
+    "expected_source": "life.txt",
+    "expected_answer_points": [
+      "小目标更容易完成",
+      "完成后更容易建立正反馈",
+      "习惯关键在于能不能持续"
+    ]
+  },
+
+  {
+    "id": "thinking_001",
+    "query": "好的复盘应该回答哪四个问题？",
+    "category": "thinking",
+    "expected_chunk_id": "thinking_0",
+    "expected_source": "thinking.txt",
+    "expected_answer_points": [
+      "原本想达到什么目标",
+      "实际发生了什么",
+      "哪些判断是正确的",
+      "哪些判断需要修正"
+    ]
+  },
+  {
+    "id": "thinking_002",
+    "query": "为什么做复杂项目时不应该一开始就追求完美架构？",
+    "category": "thinking",
+    "expected_chunk_id": "thinking_2",
+    "expected_source": "thinking.txt",
+    "expected_answer_points": [
+      "应该先完成最小闭环",
+      "最小闭环能帮助尽早发现真实问题",
+      "没有反馈的优化容易变成自我感动"
+    ]
+  },
+  {
+    "id": "thinking_003",
+    "query": "为什么优化 RAG 系统不能只凭感觉直接改 chunk 参数？",
+    "category": "thinking",
+    "expected_chunk_id": "thinking_3",
+    "expected_source": "thinking.txt",
+    "expected_answer_points": [
+      "工程决策应该建立在证据之上",
+      "应该先设计评估问题",
+      "观察 Recall@K、MRR、错误案例和召回片段",
+      "再决定下一步调整"
+    ]
+  },
+  {
+    "id": "thinking_004",
+    "query": "为什么看懂代码不代表真的能写出来？",
+    "category": "thinking",
+    "expected_chunk_id": "thinking_5",
+    "expected_source": "thinking.txt",
+    "expected_answer_points": [
+      "看懂通常只是识别已有结构",
+      "写出来需要自己完成拆分、命名、数据流设计和错误处理",
+      "真正掌握要能讲清楚输入、输出和失败处理"
+    ]
+  },
+  {
+    "id": "thinking_005",
+    "query": "为什么复杂系统调优时应该一次只改一个变量？",
+    "category": "thinking",
+    "expected_chunk_id": "thinking_8",
+    "expected_source": "thinking.txt",
+    "expected_answer_points": [
+      "同时修改多个变量后无法判断哪个改动起作用",
+      "一次只改一个变量才能积累可靠经验",
+      "避免优化结果无法归因"
+    ]
+  }
+]

@@ -1,4 +1,3 @@
-from openai import AsyncOpenAI
 from fastembed import SparseTextEmbedding
 from sentence_transformers import SentenceTransformer
 from qdrant_client.models import (
@@ -16,10 +15,10 @@ from logger import logger
 # # 1 初始化 Moonshot 客户端
 # moonshot_client = AsyncOpenAI(
 #     api_key=settings.MOONSHOT_API_KEY,
-#     base_url=settings.MOONSHOT_BASE_URL,
+#     base_url=settings.MOONSHOT_BASE_URL
 # )
 
-# 2 统一的 Prompt 模版配置
+# 统一的 Prompt 模版配置
 BASE_SYSTEM_PROMPT = (
     "你是一个高度可靠的个人知识库助手。请严格根据用户提供的参考内容（Context）回答问题。\n"
     "【铁律守则】\n"
@@ -174,7 +173,7 @@ async def generate_answer(question: str, chunks: list[dict], category: str,llm_c
         context_list.append(f"--- 片段 {idx} [来源: {c['source']}] ---\n{c['content']}\n")
     context = "\n".join(context_list)
 
-    # 3. 构造对话消息
+    # 3 构造对话消息
     messages = [
         {"role": "system", "content": full_system_prompt},
         {
@@ -183,7 +182,7 @@ async def generate_answer(question: str, chunks: list[dict], category: str,llm_c
         }
     ]
 
-    # 4. 请求 Moonshot
+    # 4 请求 Moonshot
     try:
         logger.info(
             "开始调用LLM category=%s chunk_count=%s",
@@ -209,7 +208,6 @@ async def generate_answer(question: str, chunks: list[dict], category: str,llm_c
         "answer": answer_text,
         "sources": chunks
     }
-
 
 async def ask(query_text: str, category: str, dense_model, sparse_model,llm_client,qdrant_client,) -> dict:
 

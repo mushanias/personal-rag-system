@@ -1,7 +1,11 @@
 import asyncio
-from database import client
+from qdrant_client import AsyncQdrantClient
 from settings import settings
 
+client = AsyncQdrantClient(
+    host=settings.QDRANT_HOST,
+    port=settings.QDRANT_PORT,
+)
 
 async def main():
     if not await client.collection_exists(settings.COLLECTION_NAME):

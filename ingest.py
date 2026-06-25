@@ -4,11 +4,16 @@ from pathlib import Path
 from sentence_transformers import SentenceTransformer
 from fastembed import SparseTextEmbedding
 from qdrant_client.models import PointStruct, SparseVector
-from database import client, COLLECTION_CONFIG
+from database import  COLLECTION_CONFIG
 import uuid
 import asyncio
-# 首先我们拿文档，把所有 txt 内容一次性载入内存
-# 这里应该不应该直接进去下次想下怎么办
+from qdrant_client import AsyncQdrantClient
+
+
+client = AsyncQdrantClient(
+    host=settings.QDRANT_HOST,
+    port=settings.QDRANT_PORT,
+)
 def load_docs(data_dir: str = "test") -> dict[str, str]:
     docs = {
         f.stem: f.read_text(encoding="utf-8")

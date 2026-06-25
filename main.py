@@ -10,7 +10,6 @@ from fastapi.responses import JSONResponse
 from qdrant_client import AsyncQdrantClient
 from exceptions import AppException
 from logger import logger
-from openai import AsyncOpenAI
 # 什么时候准备，什么时候运行，什么时候打扫
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
