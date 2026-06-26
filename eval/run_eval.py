@@ -9,29 +9,35 @@ from query import search_knowledge_base
 
 
 def get_project_root() -> Path:
-    """
-    当前文件位置：
-        project_root/eval/run_eval.py
-
-    所以 parents[1] 就是项目根目录。
-    """
     return Path(__file__).resolve().parents[1]
 
 
 def load_eval_data() -> list[dict]:
-    project_root = get_project_root()
-    eval_path = project_root / "eval" / "eval_data.json"
+    eval_path = get_project_root() / "eval" / "eval_data.json"
 
     if not eval_path.exists():
         raise FileNotFoundError(f"评估集不存在: {eval_path}")
 
-    return json.loads(eval_path.read_text(encoding="utf-8"))
+    data = json.loads(eval_path.read_text(encoding="utf-8"))
+
+    for item in data:
+        if "expected_chunk_ids" not in item:
+            raise ValueError(
+                f"{item.get('id')} 缺少 expected_chunk_ids 字段"
+            )
+
+        if not isinstance(item["expected_chunk_ids"], list):
+            raise TypeError(
+                f"{item.get('id')} 的 expected_chunk_ids 必须是 list[str]"
+            )
+
+    return data
 
 
-def is_hit(expected_chunk_id: str, results: list[dict]) -> bool:
+def is_hit(expected_chunk_ids: list[str], results: list[dict]) -> bool:
     """
     Strict hit:
-    只看 expected_chunk_id 是否出现在检索结果里。
+    只看 expected_chunk_ids 中是否至少有一个出现在 topK 返回结果里。
     不做文本模糊匹配。
     不做语义近似判断。
     """
@@ -40,7 +46,10 @@ def is_hit(expected_chunk_id: str, results: list[dict]) -> bool:
         for item in results
     ]
 
-    return expected_chunk_id in returned_chunk_ids
+    return any(
+        expected_id in returned_chunk_ids
+        for expected_id in expected_chunk_ids
+    )
 
 
 async def run_eval() -> None:
@@ -62,7 +71,7 @@ async def run_eval() -> None:
         for item in eval_data:
             query = item["query"]
             category = item["category"]
-            expected_chunk_id = item["expected_chunk_id"]
+            expected_chunk_ids = item["expected_chunk_ids"]
 
             results = await search_knowledge_base(
                 query_text=query,
@@ -77,7 +86,7 @@ async def run_eval() -> None:
                 for result in results
             ]
 
-            hit = is_hit(expected_chunk_id, results)
+            hit = is_hit(expected_chunk_ids, results)
 
             total += 1
             if hit:
@@ -87,7 +96,7 @@ async def run_eval() -> None:
                 "id": item["id"],
                 "query": query,
                 "category": category,
-                "expected_chunk_id": expected_chunk_id,
+                "expected_chunk_ids": expected_chunk_ids,
                 "returned_chunk_ids": returned_chunk_ids,
                 "hit": hit,
             })
@@ -102,8 +111,7 @@ async def run_eval() -> None:
     print(f"Hit: {hit_count}")
     print(f"Strict Recall@3: {recall_at_3:.3f}")
 
-    project_root = get_project_root()
-    output_path = project_root / "eval" / "eval_result.json"
+    output_path = get_project_root() / "eval" / "eval_result.json"
 
     output = {
         "metric": "Strict Recall@3",

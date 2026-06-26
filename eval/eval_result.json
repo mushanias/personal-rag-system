@@ -1,0 +1,735 @@
+{
+  "metric": "Strict Recall@3",
+  "total": 50,
+  "hit": 48,
+  "recall_at_3": 0.96,
+  "details": [
+    {
+      "id": "study_001",
+      "query": "RAG 的核心思想是什么？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_0"
+      ],
+      "returned_chunk_ids": [
+        "study_0",
+        "study_1",
+        "study_10"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_002",
+      "query": "一个基础的 RAG 查询流程通常包括哪几步？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_1"
+      ],
+      "returned_chunk_ids": [
+        "study_1",
+        "study_0",
+        "study_10"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_003",
+      "query": "为什么检索阶段如果没召回正确内容，后面的生成也很难可靠？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_1",
+        "study_11"
+      ],
+      "returned_chunk_ids": [
+        "study_13",
+        "study_2",
+        "study_11"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_004",
+      "query": "混合检索是什么意思？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_2"
+      ],
+      "returned_chunk_ids": [
+        "study_2",
+        "study_0",
+        "study_11"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_005",
+      "query": "稠密向量和稀疏向量分别擅长什么？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_2",
+        "study_3"
+      ],
+      "returned_chunk_ids": [
+        "study_2",
+        "study_3",
+        "study_13"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_006",
+      "query": "为什么知识库分类不能只靠路由判断，还要在 Qdrant 检索时过滤？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_3",
+        "study_4"
+      ],
+      "returned_chunk_ids": [
+        "study_4",
+        "study_9",
+        "study_3"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_007",
+      "query": "Payload Filter 在 Qdrant 里有什么作用？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_3",
+        "study_4"
+      ],
+      "returned_chunk_ids": [
+        "study_3",
+        "study_9",
+        "study_4"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_008",
+      "query": "chunk 太短或者太长分别会带来什么问题？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_5"
+      ],
+      "returned_chunk_ids": [
+        "study_5",
+        "study_4",
+        "study_10"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_009",
+      "query": "切块参数应该怎么决定？能不能凭感觉直接调？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_5",
+        "study_6"
+      ],
+      "returned_chunk_ids": [
+        "study_13",
+        "study_6",
+        "study_5"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_010",
+      "query": "固定窗口切块适合什么阶段？它有什么缺点？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_6",
+        "study_7"
+      ],
+      "returned_chunk_ids": [
+        "study_6",
+        "study_13",
+        "study_5"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_011",
+      "query": "如果后面想升级切块，可以往哪些方向改？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_7"
+      ],
+      "returned_chunk_ids": [
+        "study_6",
+        "study_13",
+        "study_5"
+      ],
+      "hit": false
+    },
+    {
+      "id": "study_012",
+      "query": "为什么 uuid5 适合用来生成稳定的向量点 ID？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_8"
+      ],
+      "returned_chunk_ids": [
+        "study_8",
+        "study_7",
+        "study_9"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_013",
+      "query": "重复执行 ingest 脚本时，为什么稳定 ID 很重要？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_8"
+      ],
+      "returned_chunk_ids": [
+        "study_8",
+        "study_9",
+        "study_7"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_014",
+      "query": "FastAPI 的 lifespan 适合管理哪些东西？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_9",
+        "study_10"
+      ],
+      "returned_chunk_ids": [
+        "study_9",
+        "study_8",
+        "study_10"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_015",
+      "query": "为什么模型和 Qdrant 客户端不应该每次请求都重新初始化？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_9",
+        "study_10"
+      ],
+      "returned_chunk_ids": [
+        "study_9",
+        "study_4",
+        "study_3"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_016",
+      "query": "评估 RAG 系统时，为什么第一阶段不应该先看回答优不优美？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_10",
+        "study_11"
+      ],
+      "returned_chunk_ids": [
+        "study_10",
+        "study_1",
+        "study_0"
+      ],
+      "hit": true
+    },
+    {
+      "id": "study_017",
+      "query": "第一版 RAG 评估可以先关注什么？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_11"
+      ],
+      "returned_chunk_ids": [
+        "study_1",
+        "study_0",
+        "study_10"
+      ],
+      "hit": false
+    },
+    {
+      "id": "study_018",
+      "query": "Reranker 是用来扩大召回范围的吗？什么时候才适合加？",
+      "category": "study",
+      "expected_chunk_ids": [
+        "study_12",
+        "study_13"
+      ],
+      "returned_chunk_ids": [
+        "study_12",
+        "study_11",
+        "study_13"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_001",
+      "query": "长期熬夜会对人的白天状态产生什么影响？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_0"
+      ],
+      "returned_chunk_ids": [
+        "life_0",
+        "life_2",
+        "life_1"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_002",
+      "query": "睡眠质量不只是睡够时间，还包括什么？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_0"
+      ],
+      "returned_chunk_ids": [
+        "life_0",
+        "life_1",
+        "life_7"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_003",
+      "query": "睡前可以通过哪些简单习惯来提高睡眠质量？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_0",
+        "life_1"
+      ],
+      "returned_chunk_ids": [
+        "life_1",
+        "life_0",
+        "life_2"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_004",
+      "query": "我晚上总是刷手机，有什么简单的睡前调整办法？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_1"
+      ],
+      "returned_chunk_ids": [
+        "life_1",
+        "life_0",
+        "life_8"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_005",
+      "query": "早上起床后为什么可以适量喝水？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_1",
+        "life_2"
+      ],
+      "returned_chunk_ids": [
+        "life_2",
+        "life_1",
+        "life_0"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_006",
+      "query": "白天喝水应该怎么喝比较容易坚持？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_2"
+      ],
+      "returned_chunk_ids": [
+        "life_2",
+        "life_1",
+        "life_8"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_007",
+      "query": "长时间学习或工作导致久坐时，应该怎么缓解僵硬？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_2",
+        "life_3"
+      ],
+      "returned_chunk_ids": [
+        "life_3",
+        "life_7",
+        "life_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_008",
+      "query": "久坐的时候活动一定要强度很高吗？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_3"
+      ],
+      "returned_chunk_ids": [
+        "life_3",
+        "life_6",
+        "life_2"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_009",
+      "query": "饮食不规律为什么会影响精力？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_3",
+        "life_4"
+      ],
+      "returned_chunk_ids": [
+        "life_4",
+        "life_2",
+        "life_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_010",
+      "query": "日常饮食是不是必须追求完美？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_4"
+      ],
+      "returned_chunk_ids": [
+        "life_8",
+        "life_4",
+        "life_2"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_011",
+      "query": "情绪压力大时，应该如何区分能控制和不能控制的事情？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_4",
+        "life_5"
+      ],
+      "returned_chunk_ids": [
+        "life_5",
+        "life_7",
+        "life_4"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_012",
+      "query": "压力大的时候是不是要马上解决所有问题？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_4",
+        "life_5"
+      ],
+      "returned_chunk_ids": [
+        "life_7",
+        "life_5",
+        "life_8"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_013",
+      "query": "为什么培养习惯时不应该一开始目标设得太大？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_5",
+        "life_6"
+      ],
+      "returned_chunk_ids": [
+        "life_5",
+        "life_6",
+        "life_8"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_014",
+      "query": "我想开始运动，但是坚持不下来，第一阶段可以怎么设目标？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_5",
+        "life_6"
+      ],
+      "returned_chunk_ids": [
+        "life_5",
+        "life_6",
+        "life_8"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_015",
+      "query": "学不进去一定是懒吗？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_6",
+        "life_7"
+      ],
+      "returned_chunk_ids": [
+        "life_7",
+        "life_6",
+        "life_8"
+      ],
+      "hit": true
+    },
+    {
+      "id": "life_016",
+      "query": "为什么整理桌面能让人更容易开始学习或工作？",
+      "category": "life",
+      "expected_chunk_ids": [
+        "life_7",
+        "life_8"
+      ],
+      "returned_chunk_ids": [
+        "life_8",
+        "life_7",
+        "life_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_001",
+      "query": "好的复盘应该回答哪四个问题？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_0"
+      ],
+      "returned_chunk_ids": [
+        "thinking_0",
+        "thinking_7",
+        "thinking_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_002",
+      "query": "复盘的目的是什么？是不是为了责怪自己？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_0"
+      ],
+      "returned_chunk_ids": [
+        "thinking_0",
+        "thinking_1",
+        "thinking_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_003",
+      "query": "为什么很多看起来是执行力的问题，本质可能是目标不清楚？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_0",
+        "thinking_1"
+      ],
+      "returned_chunk_ids": [
+        "thinking_1",
+        "thinking_6",
+        "thinking_0"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_004",
+      "query": "怎样的目标更容易指导行动？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_1"
+      ],
+      "returned_chunk_ids": [
+        "thinking_1",
+        "thinking_2",
+        "thinking_0"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_005",
+      "query": "为什么做复杂项目时不应该一开始就追求完美架构？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_1",
+        "thinking_2"
+      ],
+      "returned_chunk_ids": [
+        "thinking_2",
+        "thinking_1",
+        "thinking_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_006",
+      "query": "没有反馈的时候过度优化为什么危险？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_2"
+      ],
+      "returned_chunk_ids": [
+        "thinking_2",
+        "thinking_6",
+        "thinking_7"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_007",
+      "query": "为什么工程决策不能只依赖直觉？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_2",
+        "thinking_3"
+      ],
+      "returned_chunk_ids": [
+        "thinking_3",
+        "thinking_2",
+        "thinking_10"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_008",
+      "query": "优化 RAG 系统时，为什么不能感觉 chunk 太短就直接改参数？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_3"
+      ],
+      "returned_chunk_ids": [
+        "thinking_3",
+        "thinking_7",
+        "thinking_2"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_009",
+      "query": "学习新技术最困难的部分通常是什么？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_4"
+      ],
+      "returned_chunk_ids": [
+        "thinking_4",
+        "thinking_3",
+        "thinking_7"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_010",
+      "query": "异步编程的关键是记住 async 和 await 怎么写吗？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_4"
+      ],
+      "returned_chunk_ids": [
+        "thinking_4",
+        "thinking_8",
+        "thinking_7"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_011",
+      "query": "为什么看懂代码不代表真的能写出来？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_5"
+      ],
+      "returned_chunk_ids": [
+        "thinking_5",
+        "thinking_4",
+        "thinking_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_012",
+      "query": "真正掌握一个模块，应该能讲清楚什么？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_5",
+        "thinking_6"
+      ],
+      "returned_chunk_ids": [
+        "thinking_5",
+        "thinking_2",
+        "thinking_6"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_013",
+      "query": "为什么做项目时问题越看越多不一定是退步？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_6",
+        "thinking_7"
+      ],
+      "returned_chunk_ids": [
+        "thinking_6",
+        "thinking_1",
+        "thinking_10"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_014",
+      "query": "为什么复杂系统调优时应该一次只改一个变量？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_7",
+        "thinking_8"
+      ],
+      "returned_chunk_ids": [
+        "thinking_7",
+        "thinking_2",
+        "thinking_1"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_015",
+      "query": "简历里为什么不应该只堆技术名词？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_8",
+        "thinking_9"
+      ],
+      "returned_chunk_ids": [
+        "thinking_9",
+        "thinking_8",
+        "thinking_4"
+      ],
+      "hit": true
+    },
+    {
+      "id": "thinking_016",
+      "query": "面对长期任务时，怎么减少焦虑并持续推进？",
+      "category": "thinking",
+      "expected_chunk_ids": [
+        "thinking_10"
+      ],
+      "returned_chunk_ids": [
+        "thinking_10",
+        "thinking_9",
+        "thinking_1"
+      ],
+      "hit": true
+    }
+  ]
+}
