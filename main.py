@@ -10,15 +10,20 @@ from fastapi.responses import JSONResponse
 from qdrant_client import AsyncQdrantClient
 from exceptions import AppException
 from logger import logger
+from openai import AsyncOpenAI
 # 什么时候准备，什么时候运行，什么时候打扫
 @asynccontextmanager
-async def lifespan(_app: FastAPI):
+async def lifespan(app: FastAPI):
     print("正在加载模型.")
     app.state.dense_model = SentenceTransformer(settings.DENSE_MODEL_NAME)
     app.state.sparse_model = SparseTextEmbedding(model_name=settings.SPARSE_MODEL_NAME)
     app.state.qdrant_client = AsyncQdrantClient(
         host=settings.QDRANT_HOST,
         port=settings.QDRANT_PORT,
+    )
+    app.state.llm_client = AsyncOpenAI(
+        api_key=settings.MOONSHOT_API_KEY,
+        base_url=settings.MOONSHOT_BASE_URL,
     )
     # ✅ 初始化 Collection
     if not await app.state.qdrant_client.collection_exists(settings.COLLECTION_NAME):
