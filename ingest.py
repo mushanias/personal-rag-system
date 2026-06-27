@@ -79,7 +79,6 @@ def build_points(docs, dense_model, sparse_model):
                     "category": category,
                     "source": f"{category}.txt",
                     "chunk_id": f"{category}_{index}",
-                    "is_private": False,
                 },
             )
             points.append(point)
