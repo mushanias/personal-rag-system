@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-
+from chunker import chunk_text
 
 def get_project_root() -> Path:
     """
@@ -25,35 +25,6 @@ def load_docs(data_dir: Path) -> dict[str, str]:
     return docs
 
 
-def chunk_text(
-    text: str,
-    chunk_size: int = 150,
-    chunk_overlap: int = 40,
-) -> list[str]:
-    """
-    必须和 ingest.py 当前入库切块逻辑保持一致。
-    这里先复制一份，后面可以再抽到公共模块。
-    """
-    chunks = []
-    start = 0
-
-    text = "".join(
-        line.strip()
-        for line in text.splitlines()
-        if line.strip()
-    )
-
-    while start < len(text):
-        end = start + chunk_size
-        chunk = text[start:end]
-        chunks.append(chunk)
-
-        start += chunk_size - chunk_overlap
-
-        if start >= len(text) or end >= len(text):
-            break
-
-    return chunks
 
 
 def build_chunk_catalog() -> None:
@@ -66,7 +37,7 @@ def build_chunk_catalog() -> None:
     catalog = []
 
     for category, raw_text in docs.items():
-        chunks = chunk_text(raw_text, chunk_size=150, chunk_overlap=40)
+        chunks = chunk_text(raw_text)
 
         for index, content in enumerate(chunks):
             catalog.append({
