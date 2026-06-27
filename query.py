@@ -78,7 +78,8 @@ async def search_knowledge_base(
     qdrant_client,
     reranker_model=None,
     score_threshold: float | None = None,
-    candidate_limit: int = 10,
+    prefetch_limit = 30,
+    candidate_limit: int = 20,
     final_limit: int = 3,
 ) -> list[dict]:
     if score_threshold is None:
@@ -104,14 +105,14 @@ async def search_knowledge_base(
         query=dense_vector,
         using="dense",
         filter=category_filter,
-        limit=10
+        limit=prefetch_limit
     )
     # Sparse 通道
     prefetch_sparse = Prefetch(
         query=sparse_vector,
         using="sparse",
         filter=category_filter,
-        limit=10,
+        limit=prefetch_limit
     )
 
     # 4 执行 RRF 融合检索

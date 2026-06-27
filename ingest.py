@@ -8,7 +8,7 @@ from database import  COLLECTION_CONFIG
 import uuid
 import asyncio
 from qdrant_client import AsyncQdrantClient
-
+from chunker import chunk_text
 
 client = AsyncQdrantClient(
     host=settings.QDRANT_HOST,
@@ -23,24 +23,6 @@ def load_docs(data_dir: str = "test") -> dict[str, str]:
 # 现在 docs 就是一个字典
 
 # 拿到了我们开始切块
-def chunk_text(text: str, chunk_size: int = 200, chunk_overlap: int = 40) -> list[str]:
-
-    chunks = []
-    start = 0
-    # 清洗掉过多的换行符，让文本更紧凑
-    text = "".join([line.strip() for line in text.splitlines() if line.strip()])
-
-    while start < len(text):
-        end = start + chunk_size
-        chunk = text[start:end]
-        chunks.append(chunk)
-        # 每次向前移动 (窗口大小 - 重叠大小)
-        start += (chunk_size - chunk_overlap)
-
-        # 如果剩下的一点点不够一个全窗口，且已经到末尾了，就跳出
-        if start >= len(text) or end >= len(text):
-            break
-    return chunks
 
 # 切块了然后我们需要干什么？向量化储存对吧，记得组装PointStruct，还有载荷里面放隔离字段哦
 # dense_model = SentenceTransformer("BAAI/bge-small-zh-v1.5")
@@ -50,7 +32,7 @@ def build_points(docs, dense_model, sparse_model):
     points = []
 
     for category, raw_text in docs.items():
-        chunks = chunk_text(raw_text,150,40)
+        chunks = chunk_text(raw_text)
 
         for index, chunk_content in enumerate(chunks):
             unique_str = f"{category}_{index}"
