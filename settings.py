@@ -23,6 +23,11 @@ class Settings:
         "SPARSE_MODEL_NAME",
         "Qdrant/bm25"
     )
+    # Reranker
+    RERANKER_MODEL_NAME: str = os.getenv(
+        "RERANKER_MODEL_NAME",
+        "BAAI/bge-reranker-base"
+    )
 
     # LLM
     MOONSHOT_API_KEY: str | None = os.getenv("MOONSHOT_API_KEY")

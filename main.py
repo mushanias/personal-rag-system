@@ -1,7 +1,7 @@
 from settings import settings
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 from fastembed import SparseTextEmbedding
 from userRoute import router as user
 from database import COLLECTION_CONFIG
@@ -21,6 +21,7 @@ async def lifespan(app: FastAPI):
         host=settings.QDRANT_HOST,
         port=settings.QDRANT_PORT,
     )
+    app.state.reranker_model = CrossEncoder(settings.RERANKER_MODEL_NAME)
     app.state.llm_client = AsyncOpenAI(
         api_key=settings.MOONSHOT_API_KEY,
         base_url=settings.MOONSHOT_BASE_URL,

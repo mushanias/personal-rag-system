@@ -76,7 +76,10 @@ async def search_knowledge_base(
     dense_model: SentenceTransformer,
     sparse_model: SparseTextEmbedding,
     qdrant_client,
+    reranker_model=None,
     score_threshold: float | None = None,
+    candidate_limit: int = 10,
+    final_limit: int = 3,
 ) -> list[dict]:
     if score_threshold is None:
         score_threshold = settings.SCORE_THRESHOLD
@@ -117,7 +120,7 @@ async def search_knowledge_base(
             collection_name=settings.COLLECTION_NAME,
             prefetch=[prefetch_dense, prefetch_sparse],
             query=FusionQuery(fusion=Fusion.RRF),
-            limit=3,
+            limit=candidate_limit,
         )
     except Exception as e:
         raise RetrievalError(f"知识库检索失败: {str(e)}")
@@ -147,6 +150,25 @@ async def search_knowledge_base(
                 "score": hit.score,
                 "chunk_id": payload.get("chunk_id"),
             })
+    # 6 Reranker 重排：先对 Top10 候选重新排序，再截取 Top3
+    if reranker_model is not None and valid_chunks:
+        pairs = [
+            [query_text, chunk["content"]]
+            for chunk in valid_chunks
+        ]
+
+        rerank_scores = reranker_model.predict(pairs)
+
+        for chunk, rerank_score in zip(valid_chunks, rerank_scores):
+            chunk["rerank_score"] = float(rerank_score)
+
+        valid_chunks = sorted(
+            valid_chunks,
+            key=lambda item: item["rerank_score"],
+            reverse=True,
+        )
+
+    valid_chunks = valid_chunks[:final_limit]
     #所有的数据都是心怀不轨的
     logger.info(
         "检索完成 category=%s chunk_count=%s top_score=%s chunk_ids=%s sources=%s",
@@ -209,10 +231,10 @@ async def generate_answer(question: str, chunks: list[dict], category: str,llm_c
         "sources": chunks
     }
 
-async def ask(query_text: str, category: str, dense_model, sparse_model,llm_client,qdrant_client,) -> dict:
+async def ask(query_text: str, category: str, dense_model, sparse_model,reranker_model,llm_client,qdrant_client,) -> dict:
 
     # 一路召回
-    chunks = await search_knowledge_base(query_text, category, dense_model, sparse_model,qdrant_client,)
+    chunks = await search_knowledge_base(query_text, category, dense_model, sparse_model,qdrant_client,reranker_model=reranker_model,)
 
     # 如果连第一层检索都空空如也，直接熔断，保底机制
     if not chunks:
